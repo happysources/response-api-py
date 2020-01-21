@@ -1,2 +1,2 @@
-# response-api-py
+# Response API
 response api structure in python
