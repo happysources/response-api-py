@@ -13,7 +13,7 @@ import http
 class ResponseAPI(object):
 	""" ResponseAPI object """
 
-	def __response(self, httpstatus, message='', time_ms=0, found=0, data=[], error_dict=None):
+	def __response(self, httpstatus, message='', time_ms=0, found=0, data=(), error_dict=None):
 		""" structure for body response """
 
 		if not message:
@@ -37,15 +37,15 @@ class ResponseAPI(object):
 		return ret
 
 	# 2xx
-	def ok(self, message='', time_ms=0, found=0, data=[]):
+	def ok(self, message='', time_ms=0, found=0, data=()):
 		""" response 200 OK """
 		return self.__response(http.HTTPStatus.OK, message, time_ms, found, data)
 
-	def created(self, message='', time_ms=0, found=0, data=[]):
+	def created(self, message='', time_ms=0, found=0, data=()):
 		""" response 201 CREATED """
 		return self.__response(http.HTTPStatus.CREATED, message, time_ms, found, data)
 
-	def accepted(self, message='', time_ms=0, found=0, data=[]):
+	def accepted(self, message='', time_ms=0, found=0, data=()):
 		""" response 202 ACCEPTED """
 		return self.__response(http.HTTPStatus.ACCEPTED, message, time_ms, found, data)
 
@@ -113,6 +113,6 @@ if __name__ == '__main__':
 	RESPONSE = ResponseAPI()
 	pprint.pprint(RESPONSE.ok(found=10, time_ms=20))
 	pprint.pprint(RESPONSE.redirect(time_ms=30))
-	pprint.pprint(RESPONSE.bad_request(time_ms=30))
-	pprint.pprint(RESPONSE.not_found(time_ms=30))
-	pprint.pprint(RESPONSE.server_err(time_ms=30))
+	pprint.pprint(RESPONSE.bad_request(time_ms=40))
+	pprint.pprint(RESPONSE.not_found(time_ms=50))
+	pprint.pprint(RESPONSE.server_err(time_ms=60))
