@@ -62,7 +62,7 @@ class ResponseAPI(object):
 
 		# response fatal/critical (code: server_error, ... )
 		else:
-			log.critial('response %s%s: code=%s, ret=%s',\
+			log.critical('response %s%s: code=%s, ret=%s',\
 				(self.server_name, uri, httpstatus.value, ret), 3)
 
 		return ret
