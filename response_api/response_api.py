@@ -9,11 +9,16 @@ https://docs.python.org/3/library/http.html
 """
 
 import http
+from logni import log
 
 class ResponseAPI(object):
 	""" ResponseAPI object """
 
-	_pylint_fixed = 0
+	def __init__(self, server_name='API'):
+
+		self.server_name = server_name
+		self._pylint_fixed = 0
+
 
 	def __response(self, httpstatus, param):
 		""" structure for body response """
@@ -41,6 +46,24 @@ class ResponseAPI(object):
 
 		if param.get('error_dict'):
 			ret['error'] = param.get('error_dict')
+
+		# todo
+		uri = ''
+
+		# response ok (code: ok, no_content, redirect, ... )
+		if ret['status']['code'] < 400:
+			log.info('response %s%s: code=%s, ret=%s',\
+				(self.server_name, uri, httpstatus.value, ret), 3)
+
+		# response error (code: bad_request, not found, ... )
+		elif ret['status']['code'] >= 400 and ret['status']['code'] < 500:
+			log.error('response %s%s: code=%s, ret=%s',\
+				(self.server_name, uri, httpstatus.value, ret), 3)
+
+		# response fatal/critical (code: server_error, ... )
+		else:
+			log.critial('response %s%s: code=%s, ret=%s',\
+				(self.server_name, uri, httpstatus.value, ret), 3)
 
 		return ret
 
