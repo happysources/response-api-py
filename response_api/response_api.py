@@ -38,11 +38,11 @@ class ResponseAPI(object):
 				'found' : found,\
 				'time_ms' : time_ms}}
 
-		if param.get('data'):
-			ret['data'] = param.get('data')
+		if param.get('payload'):
+			ret['payload'] = param.get('payload')
 
 			if found == 0:
-				ret['data'] = len(param.get('data'))
+				ret['payload'] = len(param.get('payload'))
 
 		if param.get('error_dict'):
 			ret['error'] = param.get('error_dict')
@@ -69,25 +69,25 @@ class ResponseAPI(object):
 
 
 	# 2xx
-	def ok(self, message='', time_ms=0, found=0, data=()):
+	def ok(self, message='', time_ms=0, found=0, payload=()):
 		""" 200 OK """
 
 		return self.__response(http.HTTPStatus.OK,\
-			{'message':message, 'time_ms':time_ms, 'found':found, 'data':data})
+			{'message':message, 'time_ms':time_ms, 'found':found, 'payload':payload})
 
 
-	def created(self, message='', time_ms=0, found=0, data=()):
+	def created(self, message='', time_ms=0, found=0, payload=()):
 		""" 201 CREATED """
 
 		return self.__response(http.HTTPStatus.CREATED,\
-			{'message':message, 'time_ms':time_ms, 'found':found, 'data':data})
+			{'message':message, 'time_ms':time_ms, 'found':found, 'payload':payload})
 
 
-	def accepted(self, message='', time_ms=0, found=0, data=()):
+	def accepted(self, message='', time_ms=0, found=0, payload=()):
 		""" 202 ACCEPTED """
 
 		return self.__response(http.HTTPStatus.ACCEPTED,\
-			{'message':message, 'time_ms':time_ms, 'found':found, 'data':data})
+			{'message':message, 'time_ms':time_ms, 'found':found, 'payload':payload})
 
 
 	def no_content(self, message='', time_ms=0, found=0):
