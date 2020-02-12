@@ -171,6 +171,70 @@ class ResponseAPI(object):
 		return self.internal_server_error(message, time_ms)
 
 
+	# swagger
+	def swagger(self, response):
+		""" swagger response """
+
+		ret = {}
+		if not response:
+			return ret
+
+		for status in response:
+
+			payload = None
+			error = None
+			if response[status]:
+				payload = response[status].get('payload')
+				error = response[status].get('error')
+
+			if status == 'bad_request' and not error:
+				error = {'message': 'param_name: expected str, string must be input',\
+					'type': 'type_error'}
+
+			(code, response_data) = self.__swagger(status, payload, error)
+			ret[code] = response_data
+
+		return ret
+
+
+	def __swagger(self, status='OK', payload=None, error=None):
+		""" swagger response status """
+
+		self._pylint_fixed = 1
+
+		# alias
+		alias = {'UNAUTH': 'UNAUTHORIZED',\
+			'SERVER_ERR': 'INTERNAL_SERVER_ERROR',\
+			'SERVER_ERROR': 'INTERNAL_SERVER_ERROR'}
+
+		# status enum name
+		status_upper = status.upper()
+		status_upper = alias.get(status_upper, status_upper)
+		httpstatus = http.HTTPStatus[status_upper]
+		found = 0
+
+		if status_upper == 'OK':
+			found = 1
+
+		# http response
+		ret = {'status' : {\
+			'code' : httpstatus.value,\
+			'message' : httpstatus.phrase,\
+			'found' : found,\
+			'time_ms' : 1}}
+
+		if payload:
+			ret['payload'] = payload
+
+		if error:
+			ret['error'] = error
+
+		# swagger response
+		responses = {'description': httpstatus.name,\
+			'examples': {'application/json': ret}}
+
+		return str(httpstatus.value), responses
+
 
 if __name__ == '__main__':
 
@@ -184,3 +248,12 @@ if __name__ == '__main__':
 
 	pprint.pprint(RESPONSE.server_err(time_ms=60))
 	pprint.pprint(RESPONSE.server_error(time_ms=60))
+
+	print()
+	print('response')
+	pprint.pprint(RESPONSE.swagger({\
+		'ok': {'payload':{'id':1}},\
+		'bad_request': None,\
+		'NOT_FOUND': '',\
+		'SERVER_ERR': {},\
+	}))
